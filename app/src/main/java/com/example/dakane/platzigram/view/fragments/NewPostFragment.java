@@ -69,6 +69,7 @@ public class NewPostFragment extends Fragment {
         }
     }
 
+
     public void takePicture(){
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null ){
