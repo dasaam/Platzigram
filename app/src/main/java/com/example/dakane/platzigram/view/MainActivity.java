@@ -1,6 +1,7 @@
 package com.example.dakane.platzigram.view;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -127,6 +128,12 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()){
+                            FirebaseUser user = task.getResult().getUser();
+                            SharedPreferences.Editor sharedPreferences = getSharedPreferences("USER", MODE_PRIVATE).edit();
+                            sharedPreferences.putString("email", user.getEmail());
+                            sharedPreferences.commit();
+
+                            //Toast.makeText(getApplicationContext(), user.getEmail(), Toast.LENGTH_LONG).show();
 
                             Intent intent = new Intent(MainActivity.this, ContainerActivity.class);
                             startActivity(intent);

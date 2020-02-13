@@ -1,12 +1,15 @@
 package com.example.dakane.platzigram.view.fragments;
 
 
+import android.content.ContentUris;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.FileProvider;
 import android.view.LayoutInflater;
@@ -16,13 +19,23 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.dakane.platzigram.PlatzigramApplication;
 import com.example.dakane.platzigram.R;
+import com.example.dakane.platzigram.model.Post;
+import com.facebook.appevents.internal.Constants;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ServerValue;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -32,6 +45,11 @@ public class NewPostFragment extends Fragment {
     Button btnPicture;
     static final int REQUEST_IMAGE_CAPTURE = 1;
     String mCurrentPhotoPath;
+
+    String mCurrentAbsolutePhotoPath;
+    PlatzigramApplication app;
+    StorageReference storageReference;
+    DatabaseReference postReference;
 
     public NewPostFragment() {
         // Required empty public constructor
@@ -46,6 +64,10 @@ public class NewPostFragment extends Fragment {
 
         ivPicture = (ImageView) view.findViewById(R.id.ivPicture);
         btnPicture = (Button)view.findViewById(R.id.btnTakePicture);
+
+        app = (PlatzigramApplication) getActivity().getApplicationContext();
+        storageReference= app.getStorageReference();
+        postReference = app.getPostReference();
 
         btnPicture.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,8 +87,50 @@ public class NewPostFragment extends Fragment {
             ivPicture.setImageBitmap(imageBitmap);*/
             Picasso.with(getActivity()).load(mCurrentPhotoPath).into(ivPicture);
             addPictureToGallery();
-            Toast.makeText(getActivity(), mCurrentPhotoPath, Toast.LENGTH_LONG).show();
+            //Toast.makeText(getActivity(), mCurrentPhotoPath, Toast.LENGTH_LONG).show();
+
+            uploadFile();
         }
+    }
+
+    private void uploadFile() {
+        File newFile = new File(mCurrentAbsolutePhotoPath);
+        final Uri contentUri = Uri.fromFile(newFile);
+
+        StorageReference imageReference = storageReference.child(com.example.dakane.platzigram.utils.Constants.FIREBASE_STORAGE_IMAGES
+                + contentUri.getLastPathSegment());
+
+        UploadTask uploadTask = imageReference.putFile(contentUri);
+
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getActivity(), "Error subiendo la imagen", Toast.LENGTH_LONG).show();
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                Toast.makeText(getActivity(), taskSnapshot.getDownloadUrl().toString(), Toast.LENGTH_LONG).show();
+                String imageUrl = taskSnapshot.getDownloadUrl().toString();
+                createNewPost(imageUrl);
+            }
+        });
+      }
+
+    private void createNewPost(String imageUrl) {
+        SharedPreferences prefs = getActivity().getSharedPreferences("USER", getActivity().MODE_PRIVATE);
+        String email = prefs.getString("email", "");
+        String enCodedEmail = email.replace(".",",");
+
+        HashMap<String, Object> timeStampCreated = new HashMap<>();
+        timeStampCreated.put("timestamp", ServerValue.TIMESTAMP);
+
+        Post post = new Post(enCodedEmail, imageUrl, timeStampCreated);
+
+        //Toast.makeText(getContext(), imageUrl, Toast.LENGTH_LONG).show();
+
+        postReference.push().setValue(post);
+
     }
 
 
@@ -104,6 +168,8 @@ public class NewPostFragment extends Fragment {
                 storageDir
         );
         mCurrentPhotoPath = "file:"+image.getAbsolutePath();
+        mCurrentAbsolutePhotoPath = image.getAbsolutePath();
+
         return image;
     }
 
