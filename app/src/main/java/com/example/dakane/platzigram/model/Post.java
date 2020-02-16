@@ -1,5 +1,8 @@
 package com.example.dakane.platzigram.model;
 
+import android.text.format.DateUtils;
+
+import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -52,4 +55,9 @@ public class Post {
     public void setTimestampCreated(double timestampCreated) {
         this.timestampCreated = timestampCreated;
     }
+
+    /*public String getRelativeTimeStamp(){
+        return DateUtils.getRelativeTimeSpanString((long)this.timestampCreated,
+                System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS, DateUtils.FORMAT_ABBREV_WEEKDAY).toString();
+    }*/
 }

@@ -14,7 +14,7 @@ public class PlatzigramClient {
     private Retrofit retrofit;
     private final static String FIREBASE_BASE_URL = "https://platzigramplatzi.firebaseio.com/";
 
-    public PlatzigramClient(Retrofit retrofit) {
+    public PlatzigramClient() {
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(PostResponse.class, new PostResponseTypeAdapter())
                 .create();

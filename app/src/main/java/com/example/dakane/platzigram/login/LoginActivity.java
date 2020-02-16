@@ -1,4 +1,4 @@
-package com.example.dakane.platzigram;
+package com.example.dakane.platzigram.login;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -8,9 +8,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.dakane.platzigram.R;
 import com.example.dakane.platzigram.view.ContainerActivity;
 import com.example.dakane.platzigram.view.CreateAccountActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -18,9 +19,12 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.squareup.picasso.Picasso;
 
 public class LoginActivity extends AppCompatActivity {
+    Button btnLogin;
+    TextInputEditText etEmail;
+    TextInputEditText etPassword;
+    TextView tvCreateAccount;
 
     private FirebaseAuth firebaseAuth;
     @Override
@@ -29,12 +33,10 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        setElements();
+
         firebaseAuth = FirebaseAuth.getInstance();
 
-        final TextInputEditText etEmail = (TextInputEditText)findViewById(R.id.username);
-        final TextInputEditText etPassword = (TextInputEditText)findViewById(R.id.password);
-
-        Button btnLogin = (Button)findViewById(R.id.login);
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -72,6 +74,12 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+    }
+    public void setElements(){
+        etEmail = (TextInputEditText)findViewById(R.id.username);
+        etPassword = (TextInputEditText)findViewById(R.id.password);
+        btnLogin = (Button)findViewById(R.id.login);
+        tvCreateAccount = (TextView) findViewById(R.id.createHere);
     }
     public void goClickAccount(View view){
         Intent intent = new Intent(this, CreateAccountActivity.class);

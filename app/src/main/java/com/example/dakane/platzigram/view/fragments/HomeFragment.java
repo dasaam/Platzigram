@@ -11,18 +11,32 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.dakane.platzigram.R;
 import com.example.dakane.platzigram.adapter.PictureAdapterRecyclerView;
+import com.example.dakane.platzigram.adapter.PostAdapterRecyclerView;
+import com.example.dakane.platzigram.api.PlatzigramClient;
+import com.example.dakane.platzigram.api.PlatzigramFirebaseService;
+import com.example.dakane.platzigram.api.PostResponse;
 import com.example.dakane.platzigram.model.Picture;
+import com.example.dakane.platzigram.model.Post;
 
 import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class HomeFragment extends Fragment {
 
+    RecyclerView picturesRecycler ;
+    LinearLayoutManager linearLayoutManager;
+    ArrayList<Post> posts;
+    PostAdapterRecyclerView postAdapterRecyclerView;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -35,17 +49,21 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         showToolbar(getResources().getString(R.string.tab_home), false, view);
-        RecyclerView picturesRecycler = (RecyclerView) view.findViewById(R.id.pictureRecycler);
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        posts = new ArrayList<>();
+        populateData();
+
+        picturesRecycler = (RecyclerView) view.findViewById(R.id.pictureRecycler);
+
+        linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
         picturesRecycler.setLayoutManager(linearLayoutManager);
 
-        PictureAdapterRecyclerView pictureAdapterRecyclerView
-                = new PictureAdapterRecyclerView(buildPictures(), R.layout.cardview_picture, getActivity());
+        postAdapterRecyclerView
+                = new PostAdapterRecyclerView(posts, R.layout.cardview_picture, getActivity());
 
-        picturesRecycler.setAdapter(pictureAdapterRecyclerView);
+        picturesRecycler.setAdapter(postAdapterRecyclerView);
 
         FloatingActionButton fab =  (FloatingActionButton) view.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -61,6 +79,35 @@ public class HomeFragment extends Fragment {
 
         return view;
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        populateData();
+    }
+
+    private void populateData() {
+        PlatzigramFirebaseService service = (new PlatzigramClient()).getService();
+        Call<PostResponse> postListCall = service.getPostList();
+        postListCall.enqueue(new Callback<PostResponse>() {
+            @Override
+            public void onResponse(Call<PostResponse> call, Response<PostResponse> response) {
+                if (response.isSuccessful()){
+                    PostResponse result = response.body();
+
+                    posts.clear();
+                    posts.addAll(result.getPostList());
+
+                    postAdapterRecyclerView.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PostResponse> call, Throwable t) {
+                Toast.makeText(getContext(), t.toString(), Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     public ArrayList<Picture> buildPictures(){

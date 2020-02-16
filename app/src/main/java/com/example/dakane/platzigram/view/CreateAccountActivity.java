@@ -8,10 +8,9 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.dakane.platzigram.LoginActivity;
+import com.example.dakane.platzigram.login.LoginActivity;
 import com.example.dakane.platzigram.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
