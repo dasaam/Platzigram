@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.example.dakane.platzigram.R;
-import com.example.dakane.platzigram.view.fragments.HomeFragment;
+import com.example.dakane.platzigram.posts.ui.HomeFragment;
 import com.example.dakane.platzigram.view.fragments.ProfileFragment;
 import com.example.dakane.platzigram.view.fragments.SearchFragment;
 import com.roughike.bottombar.BottomBar;

@@ -1,4 +1,4 @@
-package com.example.dakane.platzigram.view.fragments;
+package com.example.dakane.platzigram.posts.ui;
 
 
 import android.os.Bundle;
@@ -21,6 +21,7 @@ import com.example.dakane.platzigram.api.PlatzigramFirebaseService;
 import com.example.dakane.platzigram.api.PostResponse;
 import com.example.dakane.platzigram.model.Picture;
 import com.example.dakane.platzigram.model.Post;
+import com.example.dakane.platzigram.view.fragments.NewPostFragment;
 
 import java.util.ArrayList;
 
