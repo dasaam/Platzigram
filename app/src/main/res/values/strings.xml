@@ -33,4 +33,6 @@
     <string name="title_activity_main">MainActivity</string>
     <string name="text_button_login_email">Login con email</string>
 
+    <string name="login_error_message_singin">Imposible iniciar sesion %s</string>
+
 </resources>

@@ -10,7 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.example.dakane.platzigram.login.LoginActivity;
+import com.example.dakane.platzigram.login.ui.LoginActivity;
 import com.example.dakane.platzigram.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;

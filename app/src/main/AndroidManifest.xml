@@ -47,15 +47,15 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-        <activity android:name=".login.LoginActivity">
+        <activity android:name=".login.ui.LoginActivity">
 
         </activity>
         <activity
             android:name=".view.CreateAccountActivity"
-            android:parentActivityName=".login.LoginActivity">
+            android:parentActivityName=".login.ui.LoginActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".login.LoginActivity" />
+                android:value=".login.ui.LoginActivity" />
         </activity>
         <activity
             android:name=".view.referencia"

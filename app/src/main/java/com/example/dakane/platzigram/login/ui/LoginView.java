@@ -13,5 +13,5 @@ public interface LoginView {
     void handleSignIn();
     void navigateToMainScreen();
     void navigateToCreateAccount();
-    void loginError(String erro);
+    void loginError(String error);
 }

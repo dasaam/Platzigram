@@ -5,5 +5,5 @@ package com.example.dakane.platzigram.login;
  */
 
 public interface LoginRepository {
-    void signIn();
+    void signIn(String email, String password);
 }

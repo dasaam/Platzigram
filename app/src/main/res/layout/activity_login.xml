@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.example.dakane.platzigram.login.LoginActivity"
+    tools:context="com.example.dakane.platzigram.login.ui.LoginActivity"
     android:background="@color/colorPrimary">
     <LinearLayout
         android:layout_width="match_parent"
@@ -93,7 +93,7 @@
                         android:textStyle="bold"
                         android:textSize="@dimen/textsize_donthaveaccount"
                         android:layout_toRightOf="@id/dontHaveAccount"
-                        android:onClick="goClickAccount"
+
                         />
                     <ProgressBar
                         android:id="@+id/progressbarLogin"

@@ -1,6 +1,7 @@
 package com.example.dakane.platzigram;
 
 import android.app.Application;
+import android.content.Context;
 
 import com.example.dakane.platzigram.utils.Constants;
 import com.facebook.FacebookSdk;
@@ -18,6 +19,7 @@ import com.google.firebase.storage.StorageReference;
 public class PlatzigramApplication  extends Application{
     StorageReference storageReference;
     DatabaseReference postReference;
+    Context context;
     @Override
     public void onCreate() {
         super.onCreate();
@@ -30,6 +32,8 @@ public class PlatzigramApplication  extends Application{
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
         firebaseDatabase.setPersistenceEnabled(true);
         postReference = firebaseDatabase.getReference(Constants.FIREBASE_DATABASE_LOCATION_POST);
+
+        this.context = this;
     }
 
     public StorageReference getStorageReference(){
@@ -38,5 +42,9 @@ public class PlatzigramApplication  extends Application{
 
     public DatabaseReference getPostReference(){
         return postReference;
+    }
+
+    public Context getContext(){
+        return  context;
     }
 }

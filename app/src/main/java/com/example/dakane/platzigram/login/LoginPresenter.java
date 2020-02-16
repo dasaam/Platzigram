@@ -6,5 +6,5 @@ package com.example.dakane.platzigram.login;
 
 public interface LoginPresenter {
     void onDestroy();
-    void validateLogin();
+    void validateLogin(String email, String password);
 }
